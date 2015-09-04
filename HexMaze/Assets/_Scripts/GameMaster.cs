@@ -23,7 +23,10 @@ public class GameMaster : MonoBehaviour {
 	
     // Update is called once per frame
     void Update () {
-		
+		if(Input.GetKeyDown(KeyCode.Escape))
+        {
+            Application.LoadLevel(Application.loadedLevel);
+        }
     }
     void OnEnable () {
         Events.g.AddListener<LevelEndEvent>(LevelEnd);
