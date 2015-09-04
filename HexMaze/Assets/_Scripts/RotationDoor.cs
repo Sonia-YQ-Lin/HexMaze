@@ -9,6 +9,7 @@ public class RotationDoor : MonoBehaviour {
     float deltaAngleReverse = 90f;
     bool isMoved;
     bool enableMoving = true;
+    [SerializeField] AudioClip doorRotate;
     // Use this for initialization
     void Start () {
     
@@ -21,7 +22,9 @@ public class RotationDoor : MonoBehaviour {
                 if (currentRotation == null) {
                     RotateToAngle(240f);
                     if (transform.eulerAngles.z > 240f+deltaAngleReverse) {
+                        AudioSource.PlayClipAtPoint(doorRotate, transform.position);
                         isMoved = true;
+                        ChangeColor(Color.yellow);
                     }
                 }
             }
@@ -29,7 +32,9 @@ public class RotationDoor : MonoBehaviour {
                 if (currentRotation == null) {
                     RotateToAngle(120f);
                     if (transform.eulerAngles.z > 1200f+deltaAngleReverse) {
+                        AudioSource.PlayClipAtPoint(doorRotate, transform.position);
                         isMoved = true;
+                        ChangeColor(Color.yellow);
                     }
                 }
             }
@@ -37,24 +42,39 @@ public class RotationDoor : MonoBehaviour {
                 if (currentRotation == null) {
                     RotateToAngle(0f);
                     if (transform.eulerAngles.z > 0f+deltaAngleReverse) {
+                        AudioSource.PlayClipAtPoint(doorRotate, transform.position);
                         isMoved = true;
+                        ChangeColor(Color.yellow);
                     }
                 }
             }
         } else {
             GetComponent<Rigidbody2D>().isKinematic = true;
         }
-        if (Input.GetKeyDown(KeyCode.N)) {
-            NextLevelCheck();
-        }
+        
+    }
+
+    void OnEnable(){
+        Events.g.AddListener<LevelEndEvent>(LevelEnd);
+    }
+    void OnDisable(){
+        Events.g.RemoveListener<LevelEndEvent>(LevelEnd);
+    }
+    void LevelEnd(LevelEndEvent e)
+    {
+        NextLevelCheck();
+    }
+    void ChangeColor(Color color)
+    {
+        SpriteRenderer[] rendererList = new SpriteRenderer[99];
+            rendererList = GetComponentsInChildren<SpriteRenderer>();
+            foreach (SpriteRenderer r in rendererList) {
+                r.color = color;
+            }
     }
     void NextLevelCheck () {
         if (isMoved) {
-            SpriteRenderer[] rendererList = new SpriteRenderer[99];
-            rendererList = GetComponentsInChildren<SpriteRenderer>();
-            foreach (SpriteRenderer r in rendererList) {
-                r.color = Color.red;
-            }
+            ChangeColor(Color.red);
             enableMoving = false;
 
         }

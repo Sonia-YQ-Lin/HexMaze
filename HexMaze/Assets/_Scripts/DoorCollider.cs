@@ -15,13 +15,13 @@ public class DoorCollider : MonoBehaviour {
 	void OnCollisionExit2D (Collision2D other) {
 		
         if (other != null && other.gameObject.tag == "Player") {
-        	transform.root.GetComponentInChildren<RotationDoor>().InCollider(false);
+        	//transform.root.GetComponentInChildren<RotationDoor>().InCollider(false);
         	//print("collide exit");
         }
     }
     void OnCollisionEnter2D (Collision2D other) {
         if (other != null && other.gameObject.tag == "Player") {
-        	transform.root.GetComponentInChildren<RotationDoor>().InCollider(true);
+        	//transform.root.GetComponentInChildren<RotationDoor>().InCollider(true);
         	//print("collide enter");
         }
     }
