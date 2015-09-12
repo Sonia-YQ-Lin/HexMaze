@@ -31,7 +31,7 @@ public class EndTrigger : MonoBehaviour {
 	{
 		if(other!=null && other.gameObject.tag=="Player")
 		{
-			if(Input.GetKeyDown(KeyCode.N))
+			//if(Input.GetKeyDown(KeyCode.N))
 			{
 				AudioSource.PlayClipAtPoint(passLevel, transform.position);
 				LevelsPassed++;

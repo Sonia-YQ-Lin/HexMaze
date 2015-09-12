@@ -27,6 +27,10 @@ public class GameMaster : MonoBehaviour {
     void Update () {
 		if(Input.GetKeyDown(KeyCode.Escape))
         {
+            Application.Quit();
+        }
+        if(Input.GetKeyDown(KeyCode.Backspace))
+        {
             Application.LoadLevel(Application.loadedLevel);
         }
     }
