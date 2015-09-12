@@ -7,6 +7,8 @@ public class EndTrigger : MonoBehaviour {
 	[SerializeField] AudioClip passLevel;
 	int LevelsPassed;
 	[SerializeField] Text levelUI;
+	[SerializeField] Sprite steppedEnd; 
+	[SerializeField] Sprite originalEnd; 
 
 	// Use this for initialization
 	void Start () {
@@ -22,6 +24,7 @@ public class EndTrigger : MonoBehaviour {
 		if(other!=null && other.gameObject.tag=="Player")
 		{
 			AudioSource.PlayClipAtPoint(enter, transform.position);
+			GetComponent<SpriteRenderer>().sprite=steppedEnd;
 		}
 	}
 	void OnTriggerStay2D(Collider2D other)
@@ -33,6 +36,7 @@ public class EndTrigger : MonoBehaviour {
 				AudioSource.PlayClipAtPoint(passLevel, transform.position);
 				LevelsPassed++;
 				Events.g.Raise(new LevelEndEvent());
+				GetComponent<SpriteRenderer>().sprite=originalEnd;
 			}
 		}
 	}

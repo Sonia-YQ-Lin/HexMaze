@@ -1,11 +1,13 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 public class GameMaster : MonoBehaviour {
     Vector2[] EndLocs;
     [SerializeField] Transform End;
     int length;
     int current;
+    [SerializeField] GameObject button;
     // Use this for initialization
     void Start () {
         GameObject[] EndLocObjects = GameObject.FindGameObjectsWithTag("EndLoc");
@@ -36,12 +38,19 @@ public class GameMaster : MonoBehaviour {
     }
 
     void LevelEnd (LevelEndEvent e) {
-    	int rand = (int)(Random.value*length);
-    	while(rand==current)
-    	{
-    		rand= (int)(Random.value*length);
-    	}
-    	End.position=EndLocs[rand];
-    	current=rand;
+    	LocateEnd();
+    }
+    public void RollTheDice(){
+        LocateEnd();
+        button.SetActive(false);
+    }
+    void LocateEnd(){
+        int rand = (int)(Random.value*length);
+        while(rand==current)
+        {
+            rand= (int)(Random.value*length);
+        }
+        End.position=EndLocs[rand];
+        current=rand;
     }
 }

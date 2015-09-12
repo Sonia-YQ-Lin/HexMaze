@@ -6,6 +6,7 @@ public class CameraManager : MonoBehaviour {
 	bool birdView;
 	// Use this for initialization
 	void Start () {
+		birdView=true;
 	
 	}
 	

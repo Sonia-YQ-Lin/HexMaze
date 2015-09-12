@@ -10,6 +10,9 @@ public class RotationDoor : MonoBehaviour {
     bool isMoved;
     bool enableMoving = true;
     [SerializeField] AudioClip doorRotate;
+    int levelsPassed;
+    int movedInLevel;
+    int turnsBeforeFree=4;
     // Use this for initialization
     void Start () {
     
@@ -18,33 +21,43 @@ public class RotationDoor : MonoBehaviour {
     // Update is called once per frame
     void Update () {
         if (enableMoving) {
+            
             if (transform.eulerAngles.z < 360f - deltaAngle && transform.eulerAngles.z > 240f && GetComponent<Rigidbody2D>().angularVelocity != 0f) {
                 if (currentRotation == null) {
                     RotateToAngle(240f);
-                    if (transform.eulerAngles.z > 240f+deltaAngleReverse) {
+                    print("rotate");
+                    if (transform.eulerAngles.z > 240f + deltaAngleReverse) {
                         AudioSource.PlayClipAtPoint(doorRotate, transform.position);
                         isMoved = true;
+                        movedInLevel = levelsPassed;
                         ChangeColor(Color.yellow);
+                        print("record");
                     }
                 }
             }
             if (transform.eulerAngles.z < 240f - deltaAngle && transform.eulerAngles.z > 120f && GetComponent<Rigidbody2D>().angularVelocity != 0f) {
                 if (currentRotation == null) {
                     RotateToAngle(120f);
-                    if (transform.eulerAngles.z > 1200f+deltaAngleReverse) {
+                    print("rotate");
+                    if (transform.eulerAngles.z > 120f + deltaAngleReverse) {
                         AudioSource.PlayClipAtPoint(doorRotate, transform.position);
                         isMoved = true;
+                        movedInLevel = levelsPassed;
                         ChangeColor(Color.yellow);
+                        print("record");
                     }
                 }
             }
             if (transform.eulerAngles.z < 120f - deltaAngle && transform.eulerAngles.z > 0f && GetComponent<Rigidbody2D>().angularVelocity != 0f) {
                 if (currentRotation == null) {
                     RotateToAngle(0f);
-                    if (transform.eulerAngles.z > 0f+deltaAngleReverse) {
+                    print("rotate");
+                    if (transform.eulerAngles.z > 0f + deltaAngleReverse) {
                         AudioSource.PlayClipAtPoint(doorRotate, transform.position);
                         isMoved = true;
+                        movedInLevel = levelsPassed;
                         ChangeColor(Color.yellow);
+                        print("record");
                     }
                 }
             }
@@ -54,28 +67,38 @@ public class RotationDoor : MonoBehaviour {
         
     }
 
-    void OnEnable(){
+    void OnEnable () {
         Events.g.AddListener<LevelEndEvent>(LevelEnd);
     }
-    void OnDisable(){
+    void OnDisable () {
         Events.g.RemoveListener<LevelEndEvent>(LevelEnd);
     }
-    void LevelEnd(LevelEndEvent e)
-    {
+    void LevelEnd (LevelEndEvent e) {
+        levelsPassed++;
+
         NextLevelCheck();
     }
-    void ChangeColor(Color color)
-    {
+    void ChangeColor (Color color) {
         SpriteRenderer[] rendererList = new SpriteRenderer[99];
-            rendererList = GetComponentsInChildren<SpriteRenderer>();
-            foreach (SpriteRenderer r in rendererList) {
-                r.color = color;
-            }
+        rendererList = GetComponentsInChildren<SpriteRenderer>();
+        foreach (SpriteRenderer r in rendererList) {
+            r.color = color;
+        }
     }
     void NextLevelCheck () {
         if (isMoved) {
-            ChangeColor(Color.red);
-            enableMoving = false;
+            if (levelsPassed == movedInLevel + turnsBeforeFree) {
+                ChangeColor(Color.blue);
+
+            } else if(levelsPassed > movedInLevel + turnsBeforeFree){
+                enableMoving=true;
+                GetComponent<Rigidbody2D>().isKinematic = false;
+                ChangeColor(Color.green);
+            }
+            else{
+                ChangeColor(Color.red);
+                enableMoving = false;
+            }
 
         }
 
